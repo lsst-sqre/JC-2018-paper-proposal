@@ -4,28 +4,40 @@
 paradigm for astronomical analysis.
 
 * Outline
-** LSST: basic overview, a few numbers, point to [[https://www.ted.com/talks/andrew_connolly_what_s_the_next_window_into_our_universe][Andy Connolly Ted Talk]] and [[https://arxiv.org/pdf/0805.2366.pdf][
-
-LSST Overview Paper]]
-Ten-year survey of the Southern Sky: whole sky every three nights.
+** LSST: basic overview, a few numbers, point to [[https://www.ted.com/talks/andrew_connolly_what_s_the_next_window_into_our_universe][Andy Connolly Ted Talk]] and [[https://arxiv.org/pdf/0805.2366.pdf][LSST Overview Paper]]
+Ten-year survey of the Southern sky: whole sky every three nights.
 Single-visit detection to 24.5 magnitude, 10-year-stacked to 27.
 
 *** Every 5 magnitudes is a factor of 100 in brightness
+
+Astronomy, being a science that existed before the Scientific
+Revolution, has a truly astonishing amount of tech debt in its
+nomenclature.
+
+Magnitude as a concept dates back to Hipparchus, between
+c. 129 BCE.  Numerical magnitude dates to Ptolemy (c. 140 CE).  The
+fifth root of 100 as a precise quantification dates to 1856 and Norman
+R. Pogson.
+
 *** Your eyes: 6 magnitude.  Mmmmmaybe 8 under ideal conditions
-*** A good backyard scope: 14 magnitude
+
+Ptolemy's faintest stars are "of the sixth magnitude."
+
+*** A good amateur scope: 14ish magnitude (eyes), around 20 with CCDs
 *** LSST saturates at 16 magnitude
 
-An amateur, with a *very* good scope, and a *very* dark night, can get
-to this depth.
+Amateurs can detect things this faint, but not by looking through an
+eyepiece.  Long exposures and CCDs put it within reach.
 
-*** JWST: expected to be able to see 34 magnitude
+*** HST: 31.  JWST: expected to be able to see 34 magnitude
 
 Depth isn't everything:
 
 *** Humongous field of view: 9.62 degrees^2
 
-That's the area of 40 full moons; JWST, by contrast, is 9.7 arcmin^2, so
-roughly 1/3600.
+That's the area of 40 full moons; roughly a CD held at arm's length.
+JWST, by contrast, is 9.7 arcmin^2, so 
+roughly 1/3600.  
 
 *** Etendue: mirror area times angular area of FoV: 300 m^2/deg^2
 
@@ -39,7 +51,6 @@ Each exposure 15 seconds, two exposures per visit (to do
 cosmic-ray/atmospheric transient rejection).
 
 *** 15 TB a night
-
 *** Half an exabyte of processed image data by operational EOL
 
 Largest non-proprietary data set, period.
@@ -129,7 +140,7 @@ the data, though, is _very_ important.
 In that sense the interactive component is treated as a rapid
 prototyping tool.
 
-**** It can't be worse than what we have
+**** It has to not make anyone's life significantly worse
 
 This is where the big sticking point is.  The current system--with a
 large bespoke analysis stack, a great deal of complex configuration and
@@ -190,7 +201,7 @@ completely characterize what is in a container when we turn it over to
 an unprivileged user, this is a much easier sell.  Sure, you can
 scribble on your own file space...but not everyone's.
 
-** But it could be so much better: the new Astronomical paradigm
+** But it could be so much better: the new astronomical paradigm
 
 Imagine a world where:
 
@@ -362,14 +373,14 @@ rights collapse to the long-solved problem of Unix filesystem access
 (or, perhaps, the slightly less-long-solved problem of ACLs).  We're
 currently using NFS v4 inside our k8s cluster, but functionality exists
 to point user homes at a remote NFS server, and it will be trivial to
-add additional mounts.
+add additional mounts for image data, data release products, et cetera.
 
-Why NFS?  Well, mostly, it's easy.  Since we don't expect this to be the
-system for bulk data transfer (that'd be the batch system) we don't care
-that much about high performance, and so GPFS-reexported-as-NFS works
-well enough for us.  NFS v4 also gives us ACL functionality that is a
-superset of POSIX ACLs and therefore is rich enough to support all the
-use cases we can currently think of.
+Why NFS?  Well, mostly, because it's easy.  Since we don't expect this
+to be the system for bulk data transfer (that'd be the batch system) we
+don't care that much about high performance, and so
+GPFS-reexported-as-NFS works well enough for us.  NFS v4 also gives us
+ACL functionality that is a superset of POSIX ACLs and therefore is rich
+enough to support all the use cases we can currently think of.
 
 We expect to revisit this decision over the lifetime of the project.
 However, in order to support e.g. CernVM-FS, we'd need to write a
@@ -417,7 +428,9 @@ on each login.
 A lot of this stuff is...well, it's documented but not easily
 discoverable.  Like the @property trick to turn your options form into
 an auto-refresher, or how to write classes in the JupyterHub config that
-are loaded at runtime.  
+are loaded at runtime, or how to break the JupyterHub configuration into
+multiple separate files, allowing reuse between different authentication
+scenarios.
 
 [[https://gitter.im/jupyterlab/jupyterlab][The JupyterLab (and Hub) Gitter]] is extremely helpful.  In general, the
 Jupyter project is a delight to work with.  The core team is very
