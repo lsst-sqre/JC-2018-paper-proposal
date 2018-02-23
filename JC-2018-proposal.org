@@ -3,10 +3,19 @@
 "If The Data Will Not Come to the Astronomer...": JupyterLab and a new
 paradigm for astronomical analysis.
 
+* Abstract
+
+TODO
+
 * Outline
-** LSST: basic overview, a few numbers, point to [[https://www.ted.com/talks/andrew_connolly_what_s_the_next_window_into_our_universe][Andy Connolly Ted Talk]] and [[https://arxiv.org/pdf/0805.2366.pdf][LSST Overview Paper]]
-Ten-year survey of the Southern sky: whole sky every three nights.
-Single-visit detection to 24.5 magnitude, 10-year-stacked to 27.
+** LSST: Basic overview
+*** [[https://www.ted.com/talks/andrew_connolly_what_s_the_next_window_into_our_universe][Andy Connolly Ted Talk]] and [[https://arxiv.org/pdf/0805.2366.pdf][LSST Overview Paper]]
+
+LSST will perform a ten-year survey of the Southern sky: whole sky every
+three nights.
+
+Single-visit detection to 24.5 magnitude, 10-year-stacked to 27.  That's
+very faint.  How faint?
 
 *** Every 5 magnitudes is a factor of 100 in brightness
 
@@ -39,13 +48,7 @@ That's the area of 40 full moons; roughly a CD held at arm's length.
 JWST, by contrast, is 9.7 arcmin^2, so 
 roughly 1/3600.  
 
-*** Etendue: mirror area times angular area of FoV: 300 m^2/deg^2
-
-Conserved quantity: basically, "how big is the light bucket?"
-LSST is an order of magnitude (decimal) more than existing facilities
-"Really, really wide, very fast, and also pretty deep."
-
-*** Focal plane array: 3.2 GB (189 4K x 4K sensors)
+*** Focal plane array: 3.2 Gpixels (189 4K x 4K sensors)
 
 Each exposure 15 seconds, two exposures per visit (to do
 cosmic-ray/atmospheric transient rejection).
@@ -74,17 +77,29 @@ science and quite probably analytic endeavours generally:
 In general, this is the promise of shared-computational facilities,
 right?  You can rent excess capacity when you need it, and that's
 cheaper than provisioning your own dedicated resources.  It's managed by
-professionals, who have all the advantages of economies of scale that
-you and the tower humming away under your desk do not.
+professionals, who have all the advantages of economies of scale in both
+procurement and operation that you, your laptop, and the RAID NAS device
+humming away under your desk do not.  And since they have been working
+in cloud provider environments, and you are a scientist who is only
+doing system administration by necessity, they probably are much better
+at administering infrastructure than you are.
 
-**** Purpose-built analysis stacks can be extremely complex and difficult to install
+**** In-house analysis stacks can be extremely complex and difficult to install
 
-Installing the LSST stack takes hours for experienced users, literally
-weeks (and time sucked away from experienced users) for newbies.
+Installing the LSST stack takes hours for experienced users, and
+literally weeks (and time sucked away from experienced users) for
+newbies.  Small confession: I have been at LSST almost two years.  I
+have *never* successfully installed a working stack from sources from
+scratch (I am, however, a software developer with a system
+administration background, not an astronomer).  The best I've ever
+managed is a binary install with local source mods to override
+components.
 
 **** When the whole data set is half an exabyte, you ain't gonna download it.
 
-If our input is 40Gbps every night each night for 10 years...
+If our input is 40Gbps every night each night for 10 years...how long is
+it going to take you to suck it back out of the data center?
+
 "Big Data is data you can't pick up."  Will this still be true for half
 an exabyte in 2032?  I wouldn't bet _against_ it.
 
@@ -161,16 +176,14 @@ support that.
 
 We *do* have to care about who gets to see what, since at least the
 belief in the astronomical community is that the big discoveries will be
-made quickly.  How are we going to handle the case of someone who came
-into the project at Year 3 of operations, and left after 4 more years?
-That person needs access to the raw data from years 3-7, but public data
-products only for years 1-2 and 8-10.
+made quickly.  Access is institutional or national rather than
+individual, so it's not as horrible as it could be.
 
 Sidebar: this turns out to be a particularly thorny problem for EPO,
 since they have to balance the requirements that they have adequate data
-to do meaningful educational curricula, but not so much that someone
-without data rights could scoop a researcher with rights to the raw
-data.
+to do meaningful educational curricula and enable citizen science, but
+not so much that someone without data rights could scoop a researcher
+with rights to the raw data.
 
 ***** Established astronomers
 
@@ -182,9 +195,12 @@ me!  GET OFFA MY LAWN!
 In practice, what this boils down to is: you need a Terminal window that
 gives you shell access to something that looks like a traditional Unix
 system.  Now, in our case, we mimic, more or less, a system on which you
-have an unprivileged account.  As you'll see, it's technically easier to
-give root-in-a-container to someone, but then that opens up the can of
-worms known as....
+have an unprivileged account.  Since the departmental- or
+institutional-scale shared computing environment has been a feature of
+academic science for decades, this will be a familiar model.
+
+As you'll see, it's technically easier to give root-in-a-container to
+someone, but then that opens up the can of worms known as....
 
 ***** The security team
 
@@ -250,10 +266,11 @@ the container-orchestration war.  Sure, it's got a steep learning curve,
 but it turns out that GKE was well-built and easy to use.  And once
 Google had it, it was only a matter of time until AWS and Azure followed
 suit, and at that point it became a capability that you can expect any
-cloud provider whatsoever to be able to deliver.  At which point
-(crucially for us) it became reasonable for us to insist on its being
-provided to us as a managed service by our primary data center provider
-(NCSA).
+cloud provider whatsoever to be able to deliver.  
+
+At which point (crucially for us) it became reasonable for us to specify
+that Kubernetes be the platform supported at our primary data center and
+whatever other data access centers we desire.
 
 The following should not be a surprise to anyone: containerization gives
 us the same advantages that virtualization did a decade ago (50 years
@@ -265,9 +282,26 @@ OS/distribution layer.  Kubernetes gives you a standardized way to talk
 about container orchestration without caring *how* Docker (or in general
 your containerization solution) is set up.
 
-There's what *I* think is a helpful talk about this from a few years
-ago.  Although I can't really vouch for the author:
+There's what *I* think is a helpful talk about how containerization
+addresses distribution independence from a few years ago (it only barely
+touches orchestration).  Although I can't really vouch for the author:
 [[https://athornton.github.io/containers-for-curmudgeons][Containers For Curmudgeons]].
+
+So, long bet here: Kubernetes will save astronomy.  It's the first time
+we have had a really functional abstraction layer to allow us to specify
+architectural designs.  We can finally get rid of the world where,
+"well, you need Solaris 10 on SPARC, and Sybase (not Postgres!), and
+Websphere MQ, and..."  Now we really can say: "please give us a k8s
+cluster, with three service accounts.  Default access is fine for one,
+one needs the ability to create, destroy, describe, and list pods, and
+the third needs those plus cluster-wide read operations; if you'd
+prefer, a single admin user which we can use to create those service
+accounts will work for us too."  And once you have that, then a quite
+complex multicomponent application can run on any such kubernetes
+cluster.
+
+I would be flabbergasted if this weren't portable to other physical
+sciences and very possibly to other analytic problem spaces in general.
 
 ** The specific LSST JupyterLab implementation.
 
@@ -284,12 +318,14 @@ Authentication is annoying and hard.  So let's not do it.  OAuth2 is a
 thing, and is well-supported in JupyterHub.  So the right way for *our*
 use case is to use an OAuth2 provider, and then extend it if we need to.
 
-We can use either GitHub or CILogon with the NCSA ID provider in our
-current setup.  Note that this requires a publicly-accessible endpoint,
-with a publicly-verifiable TLS certificate, in order to do the OAuth
-callback.  This isn't a problem.  Even at NCSA it is not a problem,
-since we have an external endpoint, and JupyterHub is sufficiently
-flexible to run behind a route in an Ingress controller.
+We can use either GitHub or CILogon with the NCSA
+ID provider in our current setup (adding other providers or other OAuth2
+sources is straightforward).  Note that this requires a
+publicly-accessible endpoint, with a publicly-verifiable TLS
+certificate, in order to do the OAuth callback.  This isn't a problem.
+Even at NCSA it is not a problem, since we have an external endpoint,
+and JupyterHub is sufficiently flexible to run behind a route in an
+Ingress controller.
 
 But this is way too open.
 
@@ -317,6 +353,12 @@ bunch of configuration from a directory.  Those, plus implementing that
 directory as a ConfigMap within kubernetes, gives you a very flexible
 way to create a custom authenticator that can be changed on the fly with
 little fuss.
+
+There's another nifty trick you can do with GitHub.  You're already
+asking for a token.  If you ask for one with write scope, you can then
+create a .git-credentials file at user provisioning time which allows
+authenticated HTTPS pushes with no further configuration required by the
+user.
 
 *** Problem 3: Global user consistency
 
@@ -388,6 +430,10 @@ Kubernetes storage driver.  By no means impossible, but not effort we
 want to spend right now, when NFS is well-supported and works fine for
 our current needs.
 
+Even if we do very clever object-store stuff behind the curtain, though,
+it's going to look to the user like it's a POSIX filesystem.  Users *get*
+how files work.  No one is surprised by a POSIX filesystem.
+
 *** Problem 6: User Access Restriction
 
 This has basically solved itself: the JupyterLab process is running as
@@ -423,6 +469,24 @@ with a particular tag format.  Do that, decorate options_form with
 @property, and you've got a menu of current stack images that refreshes
 on each login.
 
+This is also behind the question we get fairly often: why is the LSST
+build version done at the container level and chosen from a JupyterHub
+options form?  Other models are easy to imagine: why not have the
+selection in the Jupyter kernel menu?  Either have an even-more-enormous
+container with several stack builds in it, or, more likely, have the
+stack builds on an external fileserver mounted into the user container.
+
+The short answer is that by restricting the stack choice to be a single
+build per container, the software stack you are running is forced to be
+well-characterized.  You are running the nightly from June 21, plus your
+local modifications, and we can tell you exactly what is supposed to be
+in there.  You are not mixing and matching components from across
+builds.  You have only a single container stack and your local
+modifications to it, so you cannot (without working very hard at it) get
+into the situation where most of the stack is June 19, but Sims is April
+10, and Firefly was built on May 26.  This makes troubleshooting a great
+deal easier.
+
 *** Some other notes
 
 A lot of this stuff is...well, it's documented but not easily
@@ -430,7 +494,7 @@ discoverable.  Like the @property trick to turn your options form into
 an auto-refresher, or how to write classes in the JupyterHub config that
 are loaded at runtime, or how to break the JupyterHub configuration into
 multiple separate files, allowing reuse between different authentication
-scenarios.
+scenarios.  This is where community engagement is a must.
 
 [[https://gitter.im/jupyterlab/jupyterlab][The JupyterLab (and Hub) Gitter]] is extremely helpful.  In general, the
 Jupyter project is a delight to work with.  The core team is very
@@ -451,5 +515,6 @@ like Role-Based Access Control resources and setting up ingress
 proxies.
 
 ** Brief live demo if time and decent network
+Preload tabs so I at least have screen shots.
 
 ** Questions
