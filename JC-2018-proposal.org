@@ -5,11 +5,24 @@ paradigm for astronomical analysis.
 
 * Abstract
 
-TODO
+The Large Synoptic Survey Telescope is a very ambitious project, funded
+by NSF and DOE, to produce an extremely large survey catalogue of the
+southern sky.  The scale of the data that will be collected implies that
+traditional methods of astronomical computing will be inadequate for its
+analysis.  We propose a new paradigm, in which efficient exploration of
+the problem space--required for significant data analysis--is
+facilitated by the combination of JupyterLab, JupyterHub, and
+Kubernetes.  We discuss challenges (authentication, authorization, data
+access, et al.)  arising from this approach and the specific solutions
+LSST Data Management has found to them.
 
 * Outline
 ** LSST: Basic overview
 *** [[https://www.ted.com/talks/andrew_connolly_what_s_the_next_window_into_our_universe][Andy Connolly Ted Talk]] and [[https://arxiv.org/pdf/0805.2366.pdf][LSST Overview Paper]]
+
+The Large Synoptic Survey Telescope is funded by the National Science
+Foundation and the Department of Energy, as well as a host of other
+donors, public and private.
 
 LSST will perform a ten-year survey of the Southern sky: whole sky every
 three nights.
@@ -58,6 +71,11 @@ cosmic-ray/atmospheric transient rejection).
 
 Largest non-proprietary data set, period.
 
+**** Over one trillion photometric measures of celestial sources
+**** 10-40 million AGNs (quasars)
+**** 300,000 supernovae a year
+**** Roughly 20 billion galaxies
+**** Roughly 20 billion stars
 *** Dark Energy, TNOs, NEOs
 
 More supernovas in the first week than the human race has observed
@@ -131,6 +149,10 @@ to average one detector-saturating Type 1a Supernova *per night*.  One
 million well-characterized SN1e over the survey life.  Being stingy with
 the data is...pretty self-defeating, given the size of the firehose.
 
+There's a tangential but interesting book about the shift to Big
+Astronomy, [[http://www.hup.harvard.edu/catalog.php?isbn=9780674019966][Giant Telescopes]], and its parallels to the particle physics
+world a few decades earlier.
+
 ***** Making your own private copy of the data set is infeasible.
 
 I mean, maybe by 2032 exabyte storage will be in your toothbrush and
@@ -138,6 +160,7 @@ petabit communication speeds will be commonplace.  But I doubt it.
 We're basically planning to transmit 40Gbps all night every night for
 ten years.  That's....a lot.
 
+***** It becomes tha analysis that is key, not the data itself
 **** Interactive versus batch
 
 It is our expectation that a researcher would use the interactive
@@ -155,7 +178,7 @@ the data, though, is _very_ important.
 In that sense the interactive component is treated as a rapid
 prototyping tool.
 
-**** It has to not make anyone's life significantly worse
+**** The Next Thing has to not make anyone's life significantly worse
 
 This is where the big sticking point is.  The current system--with a
 large bespoke analysis stack, a great deal of complex configuration and
@@ -230,6 +253,7 @@ Imagine a world where:
 Here's the big reveal, which should surprise no one who's at this
 conference.  You do this all with:
 
+*** The infrastructure is standard and modular.  You drop in your own science stack and go.
 *** JupyterHub + JupyterLab + Kubernetes
 
 A high-level overview: this is the architecture for the interactive
@@ -275,12 +299,16 @@ whatever other data access centers we desire.
 The following should not be a surprise to anyone: containerization gives
 us the same advantages that virtualization did a decade ago (50 years
 ago, if you're an old VM/CMS fan like me), one layer higher up the
-software stack.  Virtualization lets you not care about the
+software stack, and standardized orchestration on top of that gives us a
+way to describe complex, multicomponent applications.
+
+Virtualization lets you not care about the
 hardware--what CPU flavor do I have, what's the NIC like, that sort of
 thing.  Containerization lets you stop caring about managing the
 OS/distribution layer.  Kubernetes gives you a standardized way to talk
 about container orchestration without caring *how* Docker (or in general
-your containerization solution) is set up.
+your containerization solution), its internal network, and that
+network's access to the outside world, is set up.
 
 There's what *I* think is a helpful talk about how containerization
 addresses distribution independence from a few years ago (it only barely
@@ -296,9 +324,14 @@ cluster, with three service accounts.  Default access is fine for one,
 one needs the ability to create, destroy, describe, and list pods, and
 the third needs those plus cluster-wide read operations; if you'd
 prefer, a single admin user which we can use to create those service
-accounts will work for us too."  And once you have that, then a quite
-complex multicomponent application can run on any such kubernetes
-cluster.
+accounts will work for us too."  
+
+Once you have that, then a quite complex multicomponent application can
+run on any such kubernetes cluster.  If you've done it well, you can
+delineate the plumbing from the application, and provide a clear way to
+replace the value-added part (for us, that's the LSST Science Stack in
+the form of a family of JupyterLab containers) with your own piece but
+keep the advantages of a 
 
 I would be flabbergasted if this weren't portable to other physical
 sciences and very possibly to other analytic problem spaces in general.
@@ -487,6 +520,24 @@ into the situation where most of the stack is June 19, but Sims is April
 10, and Firefly was built on May 26.  This makes troubleshooting a great
 deal easier.
 
+*** Problem 8: startup time and user frustrationr containers are not normal containers.  To wit: they're on the order
+of 8GB.  Now, they could be slimmed down some, and if we spent a *lot* of
+time on the stack build process, they could probably be slimmed down a
+lot.  Nevertheless, they are fundamentally going to be on the order of
+gigabytes.
+
+Downloading and unpacking (mostly unpacking) these is a slow operation.
+So we have created a pre-puller.  It knows about our tag formats, and
+ensures that the set presented in the options menu is pulled onto each
+node.  So there are a couple hours after a new cluster is brought up
+where startup would be very painful, and there's a window (15 minutes
+for pull, up to an hour for the cron job to trigger) after each nightly
+build where it would be slow, but since that's mostly in the middle of
+night, in general the operational impact is very low.
+
+Data8 does similar things.  Yuvi Panda and Erik Sundell and I have been
+bouncing ideas between our designs for a while now.  This feels like
+something that ought to be in Kubernetes itself.
 *** Some other notes
 
 A lot of this stuff is...well, it's documented but not easily
