@@ -5,16 +5,51 @@ paradigm for astronomical analysis.
 
 * Abstract
 
-The Large Synoptic Survey Telescope is a very ambitious project, funded
-by NSF and DOE, to produce an extremely large survey catalogue of the
-southern sky.  The scale of the data that will be collected implies that
-traditional methods of astronomical computing will be inadequate for its
-analysis.  We propose a new paradigm, in which efficient exploration of
-the problem space--required for significant data analysis--is
-facilitated by the combination of JupyterLab, JupyterHub, and
-Kubernetes.  We discuss challenges (authentication, authorization, data
-access, et al.)  arising from this approach and the specific solutions
-LSST Data Management has found to them.
+The Large Synoptic Survey Telescope (LSST) in an ambitious project by
+the National Science Foundation and the Department of Energy to produce
+the fastest, wider and deepest survey of the southern sky. The resulting
+7-trillion-row petabyte-scale dataset renders traditional ways
+astronomers interact with data inadequate. Our project, a science
+platform partly based on a combination of JupyterLab, JupyterHub, and
+Kubernetes holds the promise of paradigm shift in traditional scientific
+discovery workflows in our field. We discuss the challenges of providing
+a user-facing production service on this architecture (including
+authentication & authorization, reproducibility, and user experience)
+and the compelling advantages of JupyterLab as the underlying
+technology.
+
+* Description
+
+In this presentation, we briefly describe the mission of the Large
+Synoptic Survey Telescope (LSST) and the scale and scope of the data it
+will collect.  We then describe the way that data analysis has typically
+been done in the astronomical community, and show that the traditional
+methods will not suffice to enable researchers to efficiently analyze
+the enormous quantities of data that will be produced.  Adopting a new
+model, based on the combination of JupyterLab, JupyterHub, and
+Kubernetes, allows a path forward for rapid exploration of the data.  We
+briefly describe the architecture of this model and why we feel it is
+the best solution currently available.
+
+While our implementation is necessarily specific to the LSST science use
+case, we feel that it should generalize fairly readily to other
+scientific projects, and probably (with some modifications) to
+large-scale data analysis projects in general.  One huge advantage of
+our approach is that it largely eliminates the necessity for researchers
+to provide their own IT support, while allowing enough flexibility for
+them to implement their own changes to the analysis software stack.
+
+We then take a deeper look at the specific LSST implementation of the
+Jupyter system we have created, and discuss eight concrete challenges we
+faced in its development.  For each of these, we explain our solution
+and why we feel it was the appropriate one, and why we think something
+close to it is likely to be a good solution across a broad class of
+analysis projects.  All of our code is available in public GitHub
+repositories, so it is trivially available to anyone who wants to use it
+as a starting point.
+
+Finally there will be a question period and, if time and network
+conditions permit, a brief live demo of our JupyterLab environment.
 
 * Outline
 ** LSST: Basic overview
@@ -29,8 +64,10 @@ three nights.
 
 Single-visit detection to 24.5 magnitude, 10-year-stacked to 27.  That's
 very faint.  How faint?
-
-*** Every 5 magnitudes is a factor of 100 in brightness
+ and
+[[https://confluence.lsstcorp.org/display/LKB/LSST+Key+Numbers][LSST Key Numbers]]
+*** Depth:
+**** Every 5 magnitudes is a factor of 100 in brightness
 
 Astronomy, being a science that existed before the Scientific
 Revolution, has a truly astonishing amount of tech debt in its
@@ -41,17 +78,16 @@ c. 129 BCE.  Numerical magnitude dates to Ptolemy (c. 140 CE).  The
 fifth root of 100 as a precise quantification dates to 1856 and Norman
 R. Pogson.
 
-*** Your eyes: 6 magnitude.  Mmmmmaybe 8 under ideal conditions
+**** Your eyes: 6 magnitude.  Mmmmmaybe 8 under ideal conditions
 
 Ptolemy's faintest stars are "of the sixth magnitude."
 
-*** A good amateur scope: 14ish magnitude (eyes), around 20 with CCDs
-*** LSST saturates at 16 magnitude
-
-Amateurs can detect things this faint, but not by looking through an
-eyepiece.  Long exposures and CCDs put it within reach.
-
-*** HST: 31.  JWST: expected to be able to see 34 magnitude
+**** A good amateur scope: 14ish magnitude (eyes), around 20 with CCDs
+**** LSST depth:
+***** Saturates at 16 magnitude
+***** Single-visit (red) 24.7 magnitude
+***** 10-year stacked depth (red) 27.5 magnitude
+**** HST: 31.  JWST: expected to be able to see 34 magnitude
 
 Depth isn't everything:
 
@@ -61,13 +97,13 @@ That's the area of 40 full moons; roughly a CD held at arm's length.
 JWST, by contrast, is 9.7 arcmin^2, so 
 roughly 1/3600.  
 
-*** Focal plane array: 3.2 Gpixels (189 4K x 4K sensors)
+*** Focal plane array: 3.2 Gpixels (189 4K x 4K sensors), 18 bits per pixel
 
 Each exposure 15 seconds, two exposures per visit (to do
 cosmic-ray/atmospheric transient rejection).
 
-*** 15 TB a night
-*** Half an exabyte of processed image data by operational EOL
+*** On the order of 20 TB a night
+*** Half an exabyte in the final image collection by operational EOL (DR11)
 
 Largest non-proprietary data set, period.
 
@@ -253,7 +289,22 @@ Imagine a world where:
 Here's the big reveal, which should surprise no one who's at this
 conference.  You do this all with:
 
-*** The infrastructure is standard and modular.  You drop in your own science stack and go.
+*** The infrastructure is standard and modular.
+
+You drop in your own science stack and go, or, alternatively, you create
+a science stack next to your own data and go.
+
+*** We are moving towards a new publication paradigm
+
+Notebooks in general offer a magnificent opportunity to move beyond the
+format of the scientific paper, which fundamentally dates back to the
+Scientific Revolution.  By embedding algorithms into the narrative, and
+then by providing the data set you worked on (or, sometimes, for data
+rights reasons, a representative subset), replicability becomes a great
+deal easier.  It also becomes much easier for other researchers to try
+your tools on their data and see whether your approach is generally
+applicable or, for whatever reason, only works well with your data.
+
 *** JupyterHub + JupyterLab + Kubernetes
 
 A high-level overview: this is the architecture for the interactive
@@ -488,7 +539,7 @@ be limited to the damage your unprivileged user could do.
 
 This goes a long way to allaying security teams' fears.
 
-*** Problem 7: auditability and maintainability
+*** Problem 7: Auditability and Maintainability
 
 The short answer is: it's a container.  You know what went into it, both
 at the package level (if you are installing particular versions of your
@@ -520,7 +571,8 @@ into the situation where most of the stack is June 19, but Sims is April
 10, and Firefly was built on May 26.  This makes troubleshooting a great
 deal easier.
 
-*** Problem 8: startup time and user frustrationr containers are not normal containers.  To wit: they're on the order
+*** Problem 8: Startup time and User Frustration
+Our containers are not normal containers.  To wit: they're on the order
 of 8GB.  Now, they could be slimmed down some, and if we spent a *lot* of
 time on the stack build process, they could probably be slimmed down a
 lot.  Nevertheless, they are fundamentally going to be on the order of
