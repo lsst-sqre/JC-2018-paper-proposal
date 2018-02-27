@@ -53,7 +53,7 @@ conditions permit, a brief live demo of our JupyterLab environment.
 
 * Outline
 ** LSST: Basic overview
-*** [[https://www.ted.com/talks/andrew_connolly_what_s_the_next_window_into_our_universe][Andy Connolly Ted Talk]] and [[https://arxiv.org/pdf/0805.2366.pdf][LSST Overview Paper]]
+*** [[https://www.ted.com/talks/andrew_connolly_what_s_the_next_window_into_our_universe][Andy Connolly Ted Talk]] and [[https://arxiv.org/pdf/0805.2366.pdf][LSST Overview Paper]] and [[https://confluence.lsstcorp.org/display/LKB/LSST+Key+Numbers][LSST Key Numbers]]
 
 The Large Synoptic Survey Telescope is funded by the National Science
 Foundation and the Department of Energy, as well as a host of other
@@ -62,10 +62,9 @@ donors, public and private.
 LSST will perform a ten-year survey of the Southern sky: whole sky every
 three nights.
 
-Single-visit detection to 24.5 magnitude, 10-year-stacked to 27.  That's
-very faint.  How faint?
- and
-[[https://confluence.lsstcorp.org/display/LKB/LSST+Key+Numbers][LSST Key Numbers]]
+Single-visit detection to 24.7 magnitude, 10-year-stacked to 27.5 (red
+band).  That's very faint.  How faint?
+
 *** Depth:
 **** Every 5 magnitudes is a factor of 100 in brightness
 
@@ -114,8 +113,9 @@ Largest non-proprietary data set, period.
 **** Roughly 20 billion stars
 *** Dark Energy, TNOs, NEOs
 
-More supernovas in the first week than the human race has observed
-before, period.
+We're currently running at about 7,000 supernovae per year detected.
+That's a fortyfold increase from current detection capabilities, from a
+single instrument.
 
 ** Astronomical Research Status Quo
 
