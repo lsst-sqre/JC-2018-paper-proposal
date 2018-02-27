@@ -3,9 +3,9 @@
 "If The Data Will Not Come to the Astronomer...": JupyterLab and a new
 paradigm for astronomical analysis.
 
-* Abstract
+* Description
 
-The Large Synoptic Survey Telescope (LSST) in an ambitious project by
+The Large Synoptic Survey Telescope (LSST) is an ambitious project by
 the National Science Foundation and the Department of Energy to produce
 the fastest, wider and deepest survey of the southern sky. The resulting
 7-trillion-row petabyte-scale dataset renders traditional ways
@@ -18,38 +18,29 @@ authentication & authorization, reproducibility, and user experience)
 and the compelling advantages of JupyterLab as the underlying
 technology.
 
-* Description
+* Abstract
 
-In this presentation, we briefly describe the mission of the Large
-Synoptic Survey Telescope (LSST) and the scale and scope of the data it
-will collect.  We then describe the way that data analysis has typically
-been done in the astronomical community, and show that the traditional
-methods will not suffice to enable researchers to efficiently analyze
-the enormous quantities of data that will be produced.  Adopting a new
-model, based on the combination of JupyterLab, JupyterHub, and
-Kubernetes, allows a path forward for rapid exploration of the data.  We
-briefly describe the architecture of this model and why we feel it is
-the best solution currently available.
+The talk will cover:
 
-While our implementation is necessarily specific to the LSST science use
-case, we feel that it should generalize fairly readily to other
-scientific projects, and probably (with some modifications) to
-large-scale data analysis projects in general.  One huge advantage of
-our approach is that it largely eliminates the necessity for researchers
-to provide their own IT support, while allowing enough flexibility for
-them to implement their own changes to the analysis software stack.
+- A brief overview of the mission of the Large Synoptic Survey
+ Telescope (LSST) and the scale and scope of the data it will
+ collect.
 
-We then take a deeper look at the specific LSST implementation of the
-Jupyter system we have created, and discuss eight concrete challenges we
-faced in its development.  For each of these, we explain our solution
-and why we feel it was the appropriate one, and why we think something
-close to it is likely to be a good solution across a broad class of
-analysis projects.  All of our code is available in public GitHub
-repositories, so it is trivially available to anyone who wants to use it
-as a starting point.
+- The way that data analysis has typically been done in the
+ astronomical community, and show that the traditional methods will
+ not suffice to enable researchers to efficiently analyze the
+ enormous quantities of data that will be produced.
 
-Finally there will be a question period and, if time and network
-conditions permit, a brief live demo of our JupyterLab environment.
+- How adopting a new model, based on the combination of JupyterLab,
+ JupyterHub, and Kubernetes, allows a path forward for rapid
+ exploration of the data and publication-quality science analysis
+
+- A description of our architectural choices including the critical
+ role of JupyterLab in enabling the necessary features of this
+ platform
+
+- Our very positive experience as early JupyterLab adopters and
+ occasional contributors.
 
 * Outline
 ** LSST: Basic overview

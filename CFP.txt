@@ -1,0 +1,50 @@
+https://conferences.oreilly.com/jupyter/jup-ny/user/proposal/propose/cfp/621
+
+Title:
+
+"If The Data Will Not Come to the Astronomer...": JupyterLab and a new
+paradigm for astronomical analysis
+
+Description:
+
+
+Topic:
+
+JupyterHub deployments
+Reproducible research and open science
+
+Abstract:
+
+The talk will cover:
+
+* A brief overview of the mission of the Large Synoptic Survey Telescope (LSST) and the scale and scope of the data it will collect.
+
+* The way that data analysis has typically been done in the astronomical community, and show that the traditional methods will not suffice to enable researchers to efficiently analyze the enormous quantities of data that will be produced.
+
+* How adopting a new model, based on the combination of JupyterLab, JupyterHub, and Kubernetes, allows a path forward for rapid exploration of the data and publication-quality science analysis.
+
+* A description of our architectural choices including the critical role of JupyterLab in enabling the necessary features of this platform.
+
+* Our very positive experience as early JupyterLab adopters and occasional contributors.
+
+Who is it for?
+
+
+Those engaged in other scientific disciplines; our JupyterLab experience will be of general interest.
+
+Audience level:
+
+Beginner
+
+Takeaway:
+
+The combination of JupyterLab, JupyterHub, and Kubernetes provides a foundation for enabling analysis of very large data sets.  Here is a specific implementation of such a deployment, with references to code repositories and discussion of the choices we made getting there.
+
+Prereq knowledge:
+
+No prior knowledge of JupyterHub, JupyterLab, or Kubernetes is required.
+Curiosity about implementing a production-grade Jupyter service is.
+
+Conceptual or How-to:
+How-to?
+
