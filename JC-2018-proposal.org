@@ -1,22 +1,16 @@
 * Title
 
-"If The Data Will Not Come to the Astronomer...": JupyterLab and a new
-paradigm for astronomical analysis.
+"If The Data Will Not Come to the Astronomer...": JupyterLab and a sea
+change in astronomical analysis.
 
 * Description
 
-The Large Synoptic Survey Telescope (LSST) is an ambitious project by
-the National Science Foundation and the Department of Energy to produce
-the fastest, wider and deepest survey of the southern sky. The resulting
-7-trillion-row petabyte-scale dataset renders traditional ways
-astronomers interact with data inadequate. Our project, a science
-platform partly based on a combination of JupyterLab, JupyterHub, and
-Kubernetes holds the promise of paradigm shift in traditional scientific
-discovery workflows in our field. We discuss the challenges of providing
-a user-facing production service on this architecture (including
-authentication & authorization, reproducibility, and user experience)
-and the compelling advantages of JupyterLab as the underlying
-technology.
+LSST is an ambitious project to map the sky in the the fastest, widest
+and deepest survey ever made. This petabyte-scale, 7 trillion-row
+database disrupts traditional astronomical workflows. Our science
+platform requires a sea change in how astronomy is done. Learn the
+challenges of providing production services on a notebook-based
+architecture and the compelling advantages of JupyterLab.
 
 * Abstract
 
@@ -267,7 +261,7 @@ completely characterize what is in a container when we turn it over to
 an unprivileged user, this is a much easier sell.  Sure, you can
 scribble on your own file space...but not everyone's.
 
-** But it could be so much better: the new astronomical paradigm
+** But it could be so much better: a new approach
 
 Imagine a world where:
 

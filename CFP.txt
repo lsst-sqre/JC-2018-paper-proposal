@@ -2,11 +2,17 @@ https://conferences.oreilly.com/jupyter/jup-ny/user/proposal/propose/cfp/621
 
 Title:
 
-"If The Data Will Not Come to the Astronomer...": JupyterLab and a new
-paradigm for astronomical analysis
+"If The Data Will Not Come to the Astronomer...": JupyterLab and a sea
+change in astronomical analysis
 
 Description:
 
+LSST is an ambitious project to map the sky in the the fastest, widest
+and deepest survey ever made. This petabyte-scale, 7 trillion-row
+database disrupts traditional astronomical workflows. Our science
+platform requires a paradigm shift in how astronomy is done. Learn the
+challenges of providing production services on a notebook-based
+architecture and the compelling advantages of JupyterLab.
 
 Topic:
 
@@ -42,9 +48,11 @@ The combination of JupyterLab, JupyterHub, and Kubernetes provides a foundation 
 
 Prereq knowledge:
 
-No prior knowledge of JupyterHub, JupyterLab, or Kubernetes is required.
-Curiosity about implementing a production-grade Jupyter service is.
+No prior knowledge of JupyterHub, JupyterLab, or Kubernetes is required.  Curiosity about implementing a production-grade Jupyter service, with access to huge amounts of data, is.
 
 Conceptual or How-to:
 How-to?
 
+Bio:
+
+Adam Thornton is a software developer in Data Management/Science Quality and Reliability Engineering on the Large Synoptic Survey Telescope.  He is working on the JupyterLab-based interactive component of the LSST Science Platform.  He has nearly 30 years of development, IT consulting, and system administration experience in a wide variety of settings from academic computing to Fortune 20 enterprises.
